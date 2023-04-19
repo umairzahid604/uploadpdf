@@ -4,12 +4,11 @@ var fs = require('fs');
 var FormData = require('form-data');
 
 export default async function handler(req, res) {
-    res.send("done")
     
     let userdata = req.body.userdata;
     let userFormData=req.body.userFormData
     console.log(userdata)
-    var options = { format: 'a4', pageBreak: '.page-break', timeout: 60000 };
+    var options = { format: 'a4', pageBreak: '.page-break', timeout: 60000,"height": "11in","width": "10in",};
    
     
     let html = `
@@ -199,7 +198,6 @@ export default async function handler(req, res) {
     
                 <div class="space"></div>
             </div>
-            <div class="page-break"></div>
     
             <!-- PhotoID -->
             <div class="block">
@@ -678,7 +676,6 @@ export default async function handler(req, res) {
                     </span>
                 </span>
                 <div class="space"></div>
-                <div class="page-break"></div>
     
                 <!-- STUDENT   DECLARATION -->
                 <div class="block">
@@ -931,6 +928,7 @@ export default async function handler(req, res) {
         const json = await postRes.json();
         console.log(json);
 
+    res.send("done")
         
     });
    
