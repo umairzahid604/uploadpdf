@@ -26,6 +26,7 @@ export default async function handler(req, res) {
             padding: 20px;
             overflow-x: hidden;
             /* white-space: pre-wrap; */
+            font-size:.7em;
         }
     
         .t-align-center {
