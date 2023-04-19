@@ -8,6 +8,7 @@ export default async function handler(req, res) {
     
     let userdata = req.body.userdata;
     let userFormData=req.body.userFormData
+    console.log(userdata)
     var options = { format: 'a4', pageBreak: '.page-break', timeout: 60000 };
    
     
