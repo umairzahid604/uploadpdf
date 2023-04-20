@@ -933,10 +933,10 @@ export default async function handler(req, res) {
 
     // });
 
-    pdf.create(html, options).toFile(`./public/EnrollmentForm${userdata.CONTACTID}.pdf`, function (err, filename) {
+    pdf.create(html, options).toFile(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, function (err, filename) {
         if (err) return console.log(err);
         console.log(filename); // { filename: '/app/businesscard.pdf' }
-        fs.readFile(`./public/EnrollmentForm${userdata.CONTACTID}.pdf`, async function (err, data) {
+        fs.readFile(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, async function (err, data) {
             if (err) {
                 console.error(err);
             } else {
@@ -969,7 +969,7 @@ export default async function handler(req, res) {
                 const json = await postRes.json();
                 console.log(json);
 
-                fs.unlink(`./public/EnrollmentForm${userdata.CONTACTID}.pdf`, function (err) {
+                fs.unlink(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, function (err) {
                     if (err) {
                         console.error(err);
                     } else {
