@@ -4,13 +4,13 @@ var fs = require('fs');
 var FormData = require('form-data');
 
 export default async function handler(req, res) {
-    
+
     let userdata = req.body.userdata;
-    let userFormData=req.body.userFormData
+    let userFormData = req.body.userFormData
     console.log(userdata)
-    var options = { format: 'a4', pageBreak: '.page-break', timeout: 60000,"height": "11in","width": "10in",};
-   
-    
+    var options = { format: 'a4', pageBreak: '.page-break', timeout: 60000, "height": "11in", "width": "10in", };
+
+
     let html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -847,7 +847,7 @@ export default async function handler(req, res) {
     
                 <span class="wrapper">
                     <span class="heading d-block">PRINT FULL NAME</span>
-                    <span class="input w-85">${userFormData?.name_12?userFormData?.name_12:""}</span>
+                    <span class="input w-85">${userFormData?.name_12 ? userFormData?.name_12 : ""}</span>
                     <span class="heading d-block">Signature</span>
                     <div class="img"><img
                             src="${userFormData.signature_1}"
@@ -857,7 +857,7 @@ export default async function handler(req, res) {
                     <span class="input w-85">${userFormData.name_13}</span>
                     <span class="heading d-block">Signature OF GUARDIAN</span>
                     <div class="img"><img
-                            src="${userFormData?.signature_4?userFormData?.signature_4:""}"
+                            src="${userFormData?.signature_4 ? userFormData?.signature_4 : ""}"
                             alt=""></div>
     
     
@@ -884,129 +884,174 @@ export default async function handler(req, res) {
     };
 
     let portfolioData = await fetch(`${portfolioUrl}?${new URLSearchParams({contactID:userdata.CONTACTID,portfolioTypeID:42072})}`,{method:"POST",headers})
-    
+
     // let portfolioData = await fetch(`${portfolioUrl}?${new URLSearchParams({contactID:userdata.CONTACTID,portfolioTypeID:45156})}`,{method:"POST",headers})
     portfolioData = await portfolioData.json()
     console.log(portfolioData)
     // Set the API endpoint URL
-    
-    
-    
+
+
+
     // var htmls = fs.readFileSync('./index.html', 'utf8');
-    
-    
-    
-    
-    
-    pdf.create(html, options).toBuffer(async function (err, buffer) {
+
+
+
+
+
+    // pdf.create(html, options).toBuffer(async function (err, buffer) {
+    //     if (err) return console.log(err);
+    //     console.log(buffer); // { filename: '/app/businesscard.pdf' }
+
+    //     const formData = new FormData();
+    //     // Append the file to the form-data object
+    //     formData.append('addFile', buffer, {
+    //       filename: 'Enrollmentform.pdf',
+    //       contentType: `application/pdf`,
+    //       knownLength: buffer.length,
+    //     });
+
+    //     const params = {
+    //         contactID: userdata.CONTACTID,
+    //         portfolioID: portfolioData.PORTFOLIOID,
+    //         addFileFolder: 'other',
+    //     };
+
+    //     // Send the POST request to the API endpoint
+    //     const url = 'https://childcareservicestraining.app.axcelerate.com/api/contact/portfolio/file';
+    //     const postRes = await fetch(`${url}?${new URLSearchParams(params)}`, {
+    //       method: 'POST',
+    //       headers,
+    //       body: formData,
+    //     });
+
+    //      // Handle the API response
+    //     console.log(postRes.status, postRes.statusText);
+    //     const json = await postRes.json();
+    //     console.log(json);
+
+    // res.send("done")
+
+    // });
+
+    pdf.create(html, options).toFile(`./public/EnrollmentForm${userdata.CONTACTID}.pdf`, function (err, filename) {
         if (err) return console.log(err);
-        console.log(buffer); // { filename: '/app/businesscard.pdf' }
-        
-        const formData = new FormData();
-        // Append the file to the form-data object
-        formData.append('addFile', buffer, {
-          filename: 'Enrollmentform.pdf',
-          contentType: `application/pdf`,
-          knownLength: buffer.length,
-        });
-        
-        const params = {
-            contactID: userdata.CONTACTID,
-            portfolioID: portfolioData.PORTFOLIOID,
-            addFileFolder: 'other',
-        };
-        
-        // Send the POST request to the API endpoint
-        const url = 'https://childcareservicestraining.app.axcelerate.com/api/contact/portfolio/file';
-        const postRes = await fetch(`${url}?${new URLSearchParams(params)}`, {
-          method: 'POST',
-          headers,
-          body: formData,
-        });
-        
-         // Handle the API response
-        console.log(postRes.status, postRes.statusText);
-        const json = await postRes.json();
-        console.log(json);
+        console.log(filename); // { filename: '/app/businesscard.pdf' }
+        fs.readFile(`./public/EnrollmentForm${userdata.CONTACTID}.pdf`, async function (err, data) {
+            if (err) {
+                console.error(err);
+            } else {
+                const buffer = Buffer.from(data);
+                console.log(buffer);
+                const formData = new FormData();
+                // Append the file to the form-data object
+                formData.append('addFile', buffer, {
+                    filename: 'Enrollmentform.pdf',
+                    contentType: `application/pdf`,
+                    knownLength: buffer.length,
+                });
 
-    res.send("done")
-        
+                const params = {
+                    contactID: userdata.CONTACTID,
+                    portfolioID: portfolioData.PORTFOLIOID,
+                    addFileFolder: 'other',
+                };
+
+                // Send the POST request to the API endpoint
+                const url = 'https://childcareservicestraining.app.axcelerate.com/api/contact/portfolio/file';
+                const postRes = await fetch(`${url}?${new URLSearchParams(params)}`, {
+                    method: 'POST',
+                    headers,
+                    body: formData,
+                });
+
+                // Handle the API response
+                console.log(postRes.status, postRes.statusText);
+                const json = await postRes.json();
+                console.log(json);
+
+                fs.unlink(`./public/EnrollmentForm${userdata.CONTACTID}.pdf`, function (err) {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        console.log('File removed successfully');
+                    }
+                });
+
+                res.send("done")
+
+
+
+            }
+        });
+
     });
-   
-    
-    
-    
-    
-    
-    
-    // setTimeout(() => {
-        // pdf.create(html, options).toFile('./businesscard.pdf', function (err, res) {
-        //     if (err) return console.log(err);
-        //     console.log(res); // { filename: '/app/businesscard.pdf' }
-        // });
-    // }, 2000);
-  
-    
- // functions
-    
- function HighestEducation(value) {
-    let valuesArray = userFormData.checkbox_3.split(",")
-    if (!Array.isArray(valuesArray)) {
-        return parseInt(valuesArray) == value ? true : false
+
+
+
+
+
+
+
+    // functions
+
+    function HighestEducation(value) {
+        let valuesArray = userFormData.checkbox_3.split(",")
+        if (!Array.isArray(valuesArray)) {
+            return parseInt(valuesArray) == value ? true : false
+        }
+
+        if (Array.isArray(valuesArray)) {
+            let bool = valuesArray.filter((checkboxvalue) => parseInt(checkboxvalue) == value)[0]
+            return parseInt(bool) == value ? true : false
+
+        }
     }
 
-    if (Array.isArray(valuesArray)) {
-        let bool = valuesArray.filter((checkboxvalue) => parseInt(checkboxvalue) == value)[0]
-        return parseInt(bool) == value ? true : false
-
-    }
-}
 
 
+    function concession(value) {
+        let valuesArray = userFormData.checkbox_4?.split(",")
+        if (Array.isArray(valuesArray)) {
+            let matchedvalue = valuesArray.filter((checkboxvalue) => checkboxvalue.toLowerCase().includes(value.toLowerCase()))
+            return matchedvalue[0]?.toLowerCase().includes(value.toLowerCase()) ? true : false
 
-function concession(value) {
-    let valuesArray = userFormData.checkbox_4?.split(",")
-    if (Array.isArray(valuesArray)) {
-        let matchedvalue = valuesArray.filter((checkboxvalue) => checkboxvalue.toLowerCase().includes(value.toLowerCase()))
-        return matchedvalue[0]?.toLowerCase().includes(value.toLowerCase()) ? true : false
+        }
 
     }
 
-}
+
+    function TraningArea(value) {
+        let valuesArray = userFormData?.checkbox_5?.split(",")
+
+        if (Array.isArray(valuesArray)) {
+            let matchedvalue = valuesArray.filter((checkboxvalue) => checkboxvalue.toLowerCase().includes(value.toLowerCase()))
+            return matchedvalue[0]?.toLowerCase().includes(value.toLowerCase()) ? true : false
+
+        }
+
+    }
 
 
-function TraningArea(value) {
-    let valuesArray = userFormData?.checkbox_5?.split(",")
+    function disability(value) {
+        let valuesArray = userFormData?.checkbox_9?.split(",")
 
-    if (Array.isArray(valuesArray)) {
-        let matchedvalue = valuesArray.filter((checkboxvalue) => checkboxvalue.toLowerCase().includes(value.toLowerCase()))
-        return matchedvalue[0]?.toLowerCase().includes(value.toLowerCase()) ? true : false
+        if (Array.isArray(valuesArray)) {
+            let bool = valuesArray.filter((checkboxvalue) => parseInt(checkboxvalue) == value)[0]
+            return parseInt(bool) == value ? true : false
+
+        }
+    }
+
+    function StudyReason(value) {
+        let valuesArray = userFormData?.checkbox_10?.split(",")
+
+        if (Array.isArray(valuesArray)) {
+            let matchedvalue = valuesArray.filter((checkboxvalue) => checkboxvalue.toLowerCase().includes(value.toLowerCase()))
+            return matchedvalue[0]?.toLowerCase().includes(value.toLowerCase()) ? true : false
+        }
 
     }
 
-}
-
-
-function disability(value) {
-    let valuesArray = userFormData?.checkbox_9?.split(",")
-
-    if (Array.isArray(valuesArray)) {
-        let bool = valuesArray.filter((checkboxvalue) => parseInt(checkboxvalue) == value)[0]
-        return parseInt(bool) == value ? true : false
-
-    }
-}
-
-function StudyReason(value) {
-    let valuesArray = userFormData?.checkbox_10?.split(",")
-
-    if (Array.isArray(valuesArray)) {
-        let matchedvalue = valuesArray.filter((checkboxvalue) => checkboxvalue.toLowerCase().includes(value.toLowerCase()))
-        return matchedvalue[0]?.toLowerCase().includes(value.toLowerCase()) ? true : false
-    }
-
-}
-    
 
 }
 
