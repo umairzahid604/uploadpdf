@@ -3,14 +3,14 @@ var pdf = require('html-pdf');
 var fs = require('fs');
 var FormData = require('form-data');
 const path = require("path")
-const phantomjs = require("phantomjs")
+const phantomjs = require("phantomjs-prebuilt")
 
 
 export default async function handler(req, res) {
 
     let userdata = req.body.userdata;
     let userFormData = req.body.userFormData
-    console.log(path.resolve("./node_modules/phantom-prebuilt/bin/phantomjs"))
+    console.log(phantomjs.path)
     console.log(userdata)
     var options = { format: 'a4', pageBreak: '.page-break', timeout: 60000, "height": "11in", "width": "10in",phantomPath:phantomjs.path};
 
