@@ -2,13 +2,17 @@ require('dotenv').config()
 var pdf = require('html-pdf');
 var fs = require('fs');
 var FormData = require('form-data');
+const path = require("path")
+const phantomjs = require("phantomjs")
+
 
 export default async function handler(req, res) {
 
     let userdata = req.body.userdata;
     let userFormData = req.body.userFormData
+    console.log(path.resolve("./node_modules/phantom-prebuilt/bin/phantomjs"))
     console.log(userdata)
-    var options = { format: 'a4', pageBreak: '.page-break', timeout: 60000, "height": "11in", "width": "10in", };
+    var options = { format: 'a4', pageBreak: '.page-break', timeout: 60000, "height": "11in", "width": "10in",phantomPath:phantomjs.path};
 
 
     let html = `
@@ -969,16 +973,16 @@ export default async function handler(req, res) {
                 const json = await postRes.json();
                 console.log(json);
 
-                fs.unlink(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, function (err) {
+                fs.unlink(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, function(err) {
                     if (err) {
-                        console.error(err);
+                      console.error(err);
                     } else {
-                        console.log('File removed successfully');
+                      console.log('File removed successfully');
                     }
                 });
-
-                res.send("done")
-
+                  
+        res.send("done")
+                  
 
 
             }
