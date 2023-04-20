@@ -902,95 +902,95 @@ export default async function handler(req, res) {
 
 
 
-    // pdf.create(html, options).toBuffer(async function (err, buffer) {
-    //     if (err) return console.log(err);
-    //     console.log(buffer); // { filename: '/app/businesscard.pdf' }
-
-    //     const formData = new FormData();
-    //     // Append the file to the form-data object
-    //     formData.append('addFile', buffer, {
-    //       filename: 'Enrollmentform.pdf',
-    //       contentType: `application/pdf`,
-    //       knownLength: buffer.length,
-    //     });
-
-    //     const params = {
-    //         contactID: userdata.CONTACTID,
-    //         portfolioID: portfolioData.PORTFOLIOID,
-    //         addFileFolder: 'other',
-    //     };
-
-    //     // Send the POST request to the API endpoint
-    //     const url = 'https://childcareservicestraining.app.axcelerate.com/api/contact/portfolio/file';
-    //     const postRes = await fetch(`${url}?${new URLSearchParams(params)}`, {
-    //       method: 'POST',
-    //       headers,
-    //       body: formData,
-    //     });
-
-    //      // Handle the API response
-    //     console.log(postRes.status, postRes.statusText);
-    //     const json = await postRes.json();
-    //     console.log(json);
-
-    // res.send("done")
-
-    // });
-
-    pdf.create(html, options).toFile(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, function (err, filename) {
+    pdf.create(html, options).toBuffer(async function (err, buffer) {
         if (err) return console.log(err);
-        console.log(filename); // { filename: '/app/businesscard.pdf' }
-       res.send(filename)
-       
-        // fs.readFile(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, async function (err, data) {
-        //     if (err) {
-        //         console.error(err);
-        //     } else {
-        //         const buffer = Buffer.from(data);
-        //         console.log(buffer);
-        //         const formData = new FormData();
-        //         // Append the file to the form-data object
-        //         formData.append('addFile', buffer, {
-        //             filename: 'Enrollmentform.pdf',
-        //             contentType: `application/pdf`,
-        //             knownLength: buffer.length,
-        //         });
+        console.log(buffer); // { filename: '/app/businesscard.pdf' }
 
-        //         const params = {
-        //             contactID: userdata.CONTACTID,
-        //             portfolioID: portfolioData.PORTFOLIOID,
-        //             addFileFolder: 'other',
-        //         };
-
-        //         // Send the POST request to the API endpoint
-        //         const url = 'https://childcareservicestraining.app.axcelerate.com/api/contact/portfolio/file';
-        //         const postRes = await fetch(`${url}?${new URLSearchParams(params)}`, {
-        //             method: 'POST',
-        //             headers,
-        //             body: formData,
-        //         });
-
-        //         // Handle the API response
-        //         console.log(postRes.status, postRes.statusText);
-        //         const json = await postRes.json();
-        //         console.log(json);
-
-        //         fs.unlink(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, function(err) {
-        //             if (err) {
-        //               console.error(err);
-        //             } else {
-        //               console.log('File removed successfully');
-        //             }
-        //         });
-                  
-        // res.send("done")
-                  
-
-
-        //     }
+        // const formData = new FormData();
+        // // Append the file to the form-data object
+        // formData.append('addFile', buffer, {
+        //   filename: 'Enrollmentform.pdf',
+        //   contentType: `application/pdf`,
+        //   knownLength: buffer.length,
         // });
 
+        // const params = {
+        //     contactID: userdata.CONTACTID,
+        //     portfolioID: portfolioData.PORTFOLIOID,
+        //     addFileFolder: 'other',
+        // };
+
+        // // Send the POST request to the API endpoint
+        // const url = 'https://childcareservicestraining.app.axcelerate.com/api/contact/portfolio/file';
+        // const postRes = await fetch(`${url}?${new URLSearchParams(params)}`, {
+        //   method: 'POST',
+        //   headers,
+        //   body: formData,
+        // });
+
+        //  // Handle the API response
+        // console.log(postRes.status, postRes.statusText);
+        // const json = await postRes.json();
+        // console.log(json);
+
+    res.send("done")
+
     });
+
+    // pdf.create(html, options).toFile(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, function (err, filename) {
+    //     if (err) return console.log(err);
+    //     console.log(filename); // { filename: '/app/businesscard.pdf' }
+    //    res.send(filename)
+       
+    //     // fs.readFile(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, async function (err, data) {
+    //     //     if (err) {
+    //     //         console.error(err);
+    //     //     } else {
+    //     //         const buffer = Buffer.from(data);
+    //     //         console.log(buffer);
+    //     //         const formData = new FormData();
+    //     //         // Append the file to the form-data object
+    //     //         formData.append('addFile', buffer, {
+    //     //             filename: 'Enrollmentform.pdf',
+    //     //             contentType: `application/pdf`,
+    //     //             knownLength: buffer.length,
+    //     //         });
+
+    //     //         const params = {
+    //     //             contactID: userdata.CONTACTID,
+    //     //             portfolioID: portfolioData.PORTFOLIOID,
+    //     //             addFileFolder: 'other',
+    //     //         };
+
+    //     //         // Send the POST request to the API endpoint
+    //     //         const url = 'https://childcareservicestraining.app.axcelerate.com/api/contact/portfolio/file';
+    //     //         const postRes = await fetch(`${url}?${new URLSearchParams(params)}`, {
+    //     //             method: 'POST',
+    //     //             headers,
+    //     //             body: formData,
+    //     //         });
+
+    //     //         // Handle the API response
+    //     //         console.log(postRes.status, postRes.statusText);
+    //     //         const json = await postRes.json();
+    //     //         console.log(json);
+
+    //     //         fs.unlink(`./temp/EnrollmentForm${userdata.CONTACTID}.pdf`, function(err) {
+    //     //             if (err) {
+    //     //               console.error(err);
+    //     //             } else {
+    //     //               console.log('File removed successfully');
+    //     //             }
+    //     //         });
+                  
+    //     // res.send("done")
+                  
+
+
+    //     //     }
+    //     // });
+
+    // });
 
 
 
